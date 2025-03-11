@@ -1,0 +1,30 @@
+﻿@page "{id:int}"
+@model FSPBook.Portal.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>@Model.Profile.FullName</h1>
+        <h4>@Model.Profile.JobTitle</h4>
+    </div>
+    <h3 class="mt-4">Recent Posts</h3>
+    @if (Model.Posts.Any())
+    {
+        <ul class="list-group">
+            @foreach (var post in Model.Posts)
+            {
+                <li class="list-group-item">
+                    <small class="float-right text-info">@post.DateTimePosted.ToString("f")</small>
+                    <br />
+                    <p>@post.Content</p>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No posts available for this user.</p>
+    }
+</div>
