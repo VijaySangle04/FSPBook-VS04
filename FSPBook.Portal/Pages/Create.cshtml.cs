@@ -51,7 +51,8 @@ namespace FSPBook.Pages
         {
             if (ProfileId != -1)
             {
-                var postId = await _createPostService.CreatePostAsync(ProfileId, ContentInput);
+                var postId = await _createPostService
+                    .CreatePostAsync(ProfileId, ContentInput);
                 Success = true;
             }
 

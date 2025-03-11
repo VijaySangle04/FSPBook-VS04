@@ -13,7 +13,8 @@ namespace FSPBook.Portal.Pages
         private readonly IProfileRepository _profileRepository;
         private readonly IPostRepository _postRepository;
 
-        public ProfileModel(IProfileRepository profileRepository, IPostRepository postRepository)
+        public ProfileModel(IProfileRepository profileRepository, 
+                            IPostRepository postRepository)
         {
             _profileRepository = profileRepository;
             _postRepository = postRepository;

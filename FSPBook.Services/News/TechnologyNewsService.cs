@@ -18,8 +18,9 @@ namespace FSPBook.Services.News
             _cacheService = cacheService;
             _newsApiClient = newsApiClient;
             _retryPolicy = Policy.Handle<HttpRequestException>()
-                .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+                                 .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                                 .WaitAndRetryAsync(3, 
+                                    retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
             _circuitBreakerPolicy = Policy.Handle<HttpRequestException>()
                 .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)

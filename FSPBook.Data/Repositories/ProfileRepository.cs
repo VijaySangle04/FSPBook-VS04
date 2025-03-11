@@ -21,7 +21,8 @@ namespace FSPBook.Data.Repositories
 
         public async Task<Profile> GetProfileByIdAsync(int id)
         {
-            var profile = await _context.Profile.FirstOrDefaultAsync(p => p.Id == id);
+            var profile = await _context.Profile
+                                .FirstOrDefaultAsync(p => p.Id == id);
             if (profile == null)
             {
                 return null;

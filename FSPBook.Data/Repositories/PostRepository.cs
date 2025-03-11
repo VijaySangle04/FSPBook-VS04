@@ -36,13 +36,6 @@ namespace FSPBook.Data.Repositories
             return post;
         }
 
-        public async Task<IEnumerable<Post>> GetPostsByAuthorAsync(int authorId)
-        {
-            return await _context.Post
-                .Where(p => p.AuthorId == authorId)
-                .ToListAsync();
-        }
-
         public async Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(int authorId)
         {
             return await _context.Post
@@ -59,7 +52,8 @@ namespace FSPBook.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<(IEnumerable<Post> Posts, int TotalCount)> GetPaginatedPostsAsync(int page, int pageSize)
+        public async Task<(IEnumerable<Post> Posts, int TotalCount)> 
+            GetPaginatedPostsAsync(int page, int pageSize)
         {
             var query = _context.Post.Include(p => p.Author)
                         .OrderByDescending(p => p.DateTimePosted);

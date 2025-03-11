@@ -17,7 +17,11 @@ namespace FSPBook.Services.News
             var baseUrl = _configuration["TheNewsApi:BaseUrl"];
             var categories = _configuration["TheNewsApi:Categories"];
             var language = _configuration["TheNewsApi:Language"];
-            var url = $"{baseUrl}?api_token={apiToken}&categories={categories}&language={language}&limit={limit}";
+            var url = $"{baseUrl}?" +
+                      $"api_token={apiToken}" +
+                      $"&categories={categories}" +
+                      $"&language={language}" +
+                      $"&limit={limit}";
 
             var client = new HttpClient();
             return await client.GetAsync(url);

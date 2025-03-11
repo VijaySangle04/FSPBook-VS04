@@ -26,15 +26,16 @@ namespace FSPBook.Services.Posts
         /// <returns></returns>
         public async Task<GetPostsResult> GetPostsAsync(int page, int pageSize)
         {
-            var (posts, totalCount) = await _postRepository.GetPaginatedPostsAsync(page, pageSize);
+            var (posts, totalCount) = await _postRepository
+                                     .GetPaginatedPostsAsync(page, pageSize);
 
-            var paginatedPosts = posts.Select(p => new PostDto
+            var paginatedPosts = posts.Select(post => new PostDto
             {
-                Id = p.Id,
-                Content = p.Content,
-                AuthorName = $"{p.Author.FirstName} {p.Author.LastName}",
-                DateTimePosted = p.DateTimePosted,
-                AuthorId = p.AuthorId
+                Id = post.Id,
+                Content = post.Content,
+                AuthorName = $"{post.Author.FirstName} {post.Author.LastName}",
+                DateTimePosted = post.DateTimePosted,
+                AuthorId = post.AuthorId
             }).ToList();
 
             return new GetPostsResult

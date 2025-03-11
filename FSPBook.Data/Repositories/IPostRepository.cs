@@ -9,7 +9,6 @@ namespace FSPBook.Data.Repositories
         Task AddPostAsync(Post post);
         Task<IEnumerable<Post>> GetAllPostsAsync();
         Task<Post> GetPostByIdAsync(int id);
-        Task<IEnumerable<Post>> GetPostsByAuthorAsync(int authorId);
         Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(int authorId);
         Task<(IEnumerable<Post> Posts, int TotalCount)> GetPaginatedPostsAsync(int page, int pageSize);
     }

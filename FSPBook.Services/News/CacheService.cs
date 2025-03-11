@@ -11,15 +11,18 @@ namespace FSPBook.Services.News
             _cache = cache;
         }
 
-        public async Task<IEnumerable<NewsArticle>> GetOrAddAsync(string cacheKey, Func<Task<IEnumerable<NewsArticle>>> fetchFunction, TimeSpan expiration)
+        public async Task<IEnumerable<NewsArticle>> GetOrAddAsync(string cacheKey, 
+            Func<Task<IEnumerable<NewsArticle>>> fetchFunction, TimeSpan expiration)
         {
-            if (_cache.TryGetValue(cacheKey, out IEnumerable<NewsArticle> cachedArticles))
+            if (_cache.TryGetValue(cacheKey, 
+                out IEnumerable<NewsArticle> cachedArticles))
             {
                 return cachedArticles;
             }
 
             var articles = await fetchFunction();
-            _cache.Set(cacheKey, articles, new MemoryCacheEntryOptions().SetSlidingExpiration(expiration));
+            _cache.Set(cacheKey, articles, 
+                new MemoryCacheEntryOptions().SetSlidingExpiration(expiration));
             return articles;
         }
     }

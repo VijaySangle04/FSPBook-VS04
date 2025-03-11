@@ -14,7 +14,8 @@ using System;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
-builder.Services.AddDbContext<Context>(options => options.UseInMemoryDatabase("FSPBookDataBase"));
+builder.Services.AddDbContext<Context>(options => 
+                                        options.UseInMemoryDatabase("FSPBookDataBase"));
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();

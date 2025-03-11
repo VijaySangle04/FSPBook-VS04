@@ -16,7 +16,9 @@
             @foreach (var post in Model.Posts)
             {
                 <li class="list-group-item">
-                    <small class="float-right text-info">@post.DateTimePosted.ToString("f")</small>
+                    <small class="float-right text-info">
+                        @post.DateTimePosted.ToString("f")
+                    </small>
                     <br />
                     <p>@post.Content</p>
                 </li>
@@ -25,6 +27,10 @@
     }
     else
     {
-        <p>No posts available for this user.</p>
+        <ul class="list-group">
+            <li class="list-group-item text-info text-center">
+                <p>No posts by @Model.Profile.FullName.</p>
+            </li>
+        </ul>
     }
 </div>

@@ -2,6 +2,7 @@
 {
     public interface ICacheService
     {
-        Task<IEnumerable<NewsArticle>> GetOrAddAsync(string cacheKey, Func<Task<IEnumerable<NewsArticle>>> fetchFunction, TimeSpan expiration);
+        Task<IEnumerable<NewsArticle>> GetOrAddAsync(string cacheKey, 
+            Func<Task<IEnumerable<NewsArticle>>> fetchFunction, TimeSpan expiration);
     }
 }
