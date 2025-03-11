@@ -1,16 +1,12 @@
 using FSPBook.Data;
 using FSPBook.Data.DTOs;
-using FSPBook.Data.Entities;
-using FSPBook.Services;
 using FSPBook.Services.Posts;
 using FSPBook.Services.Profiles;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FSPBook.Pages
@@ -19,8 +15,8 @@ namespace FSPBook.Pages
     {
         public Context DbContext { get; set; }
 
-        private readonly CreatePostService _createPostService;
-        private readonly GetProfilesService _getProfilesService;
+        private readonly ICreatePostService _createPostService;
+        private readonly IGetProfilesService _getProfilesService;
 
         public List<ProfileDto> Profiles { get; set; }
 
@@ -35,7 +31,7 @@ namespace FSPBook.Pages
         [MinLength(1, ErrorMessage = "Post needs some content")]
         public string ContentInput { get; set; }
 
-        public CreateModel(Context context, CreatePostService createPostService, GetProfilesService getProfilesService)
+        public CreateModel(Context context, ICreatePostService createPostService, IGetProfilesService getProfilesService)
         {
             DbContext = context;
             _createPostService = createPostService;
@@ -47,22 +43,28 @@ namespace FSPBook.Pages
             await LoadProfiles();
         }
 
+        /// <summary>
+        /// Validate and Create a post
+        /// </summary>
+        /// <returns></returns>
         public async Task OnPostAsync()
         {
             if (ProfileId != -1)
             {
                 var postId = await _createPostService.CreatePostAsync(ProfileId, ContentInput);
-                //DbContext.Post.Add(new Post { AuthorId = ProfileId, Content = ContentInput, DateTimePosted = DateTimeOffset.Now });
-                //await DbContext.SaveChangesAsync();
                 Success = true;
             }
 
             await LoadProfiles();
         }
 
+        /// <summary>
+        /// Load profiles for dropdown
+        /// </summary>
+        /// <returns></returns>
         private async Task LoadProfiles()
         {
-            //Profiles = await DbContext.Profile.Select(ProfileDto.FromProfile);
+            // Call GetProfilesService
             Profiles = await _getProfilesService.GetProfilesAsync();
         }
     }

@@ -9,7 +9,7 @@ namespace FSPBook.Services.Posts
         public int TotalPages { get; set; }
     }
 
-    public class GetPostsService
+    public class GetPostsService : IGetPostsService
     {
         private readonly IPostRepository _postRepository;
 
@@ -18,6 +18,12 @@ namespace FSPBook.Services.Posts
             _postRepository = postRepository;
         }
 
+        /// <summary>
+        /// Fetches paginated posts
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<GetPostsResult> GetPostsAsync(int page, int pageSize)
         {
             var (posts, totalCount) = await _postRepository.GetPaginatedPostsAsync(page, pageSize);

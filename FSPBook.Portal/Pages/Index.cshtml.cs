@@ -4,7 +4,6 @@ using FSPBook.Services.Posts;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace FSPBook.Pages
@@ -12,9 +11,9 @@ namespace FSPBook.Pages
     public class IndexModel : PageModel
     {
         private readonly INewsService _newsService;
-        private readonly GetPostsService _getPostsService;
+        private readonly IGetPostsService _getPostsService;
 
-        public IndexModel(INewsService newsService, GetPostsService getPostsService)
+        public IndexModel(INewsService newsService, IGetPostsService getPostsService)
         {
             _newsService = newsService;
             _getPostsService = getPostsService;
@@ -25,32 +24,25 @@ namespace FSPBook.Pages
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; }
 
-        private Timer timer;
-
         public async Task OnGetAsync(int? currentPage = 1)
         {
-            // Fetch posts
             CurrentPage = currentPage ?? 1;
             Console.WriteLine($"Current Page: {CurrentPage}");
 
+            // Fetch posts
             var result = await _getPostsService.GetPostsAsync(CurrentPage, 10);
             Posts = result.Posts;
             TotalPages = result.TotalPages;
 
             Console.WriteLine($"Total Pages: {TotalPages}, Posts Fetched: {Posts.Count}");
 
-            NewsArticles = await _newsService.GetTopHeadlinesAsync(5);
-            timer = new Timer(async _ => await LoadNewsAsync(), null, TimeSpan.Zero, TimeSpan.FromSeconds(20));
+            // Fetch top news
+            await LoadNewsAsync();
         }
 
         private async Task LoadNewsAsync()
         {
-            NewsArticles = await _newsService.GetTopHeadlinesAsync(5, true);
-        }
-
-        public void Dispose()
-        {
-            timer?.Dispose();
+            NewsArticles = await _newsService.GetTopHeadlinesAsync(5);
         }
     }
 }

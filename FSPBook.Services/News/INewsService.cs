@@ -1,9 +1,7 @@
-﻿using System.Diagnostics.SymbolStore;
-
-namespace FSPBook.Services.News
+﻿namespace FSPBook.Services.News
 {
     public interface INewsService
     {
-        Task<IEnumerable<NewsArticle>> GetTopHeadlinesAsync(int limit, bool clearCache = false);
+        Task<IEnumerable<NewsArticle>> GetTopHeadlinesAsync(int limit);
     }
 }

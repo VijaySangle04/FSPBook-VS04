@@ -1,5 +1,4 @@
-﻿using FSPBook.Data;
-using FSPBook.Data.Entities;
+﻿using FSPBook.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;

@@ -3,7 +3,7 @@ using FSPBook.Data.Repositories;
 
 namespace FSPBook.Services.Profiles
 {
-    public class GetProfilesService
+    public class GetProfilesService : IGetProfilesService
     {
         private readonly IProfileRepository _profileRepository;
 
@@ -12,9 +12,13 @@ namespace FSPBook.Services.Profiles
             _profileRepository = profileRepository;
         }
 
+        /// <summary>
+        /// Fetches all user profiles
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<ProfileDto>> GetProfilesAsync()
         {
-            var profiles = await _profileRepository.GetAllAsync();
+            var profiles = await _profileRepository.GetAllProfilesAsync();
             return profiles.Select(ProfileDto.FromProfile).ToList();
         }
     }

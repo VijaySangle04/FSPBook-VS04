@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using Polly;
+﻿using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
 using System.Text.Json;
@@ -28,7 +26,12 @@ namespace FSPBook.Services.News
                 .CircuitBreakerAsync(2, TimeSpan.FromMinutes(1));
         }
 
-        public async Task<IEnumerable<NewsArticle>> GetTopHeadlinesAsync(int limit, bool clearCache = false)
+        /// <summary>
+        /// Get the top headlines for technology news
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<NewsArticle>> GetTopHeadlinesAsync(int limit)
         {
             var cacheKey = $"TechHeadlines_{limit}";
 
@@ -45,7 +48,7 @@ namespace FSPBook.Services.News
                 var content = await response.Content.ReadAsStringAsync();
                 var newsResponse = JsonSerializer.Deserialize<NewsResponse>(content);
                 return newsResponse?.Data ?? new List<NewsArticle>();
-            }, TimeSpan.FromMinutes(30));
+            }, TimeSpan.FromMinutes(10));
         }
     }
 

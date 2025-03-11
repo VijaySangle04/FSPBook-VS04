@@ -14,7 +14,7 @@ namespace FSPBook.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Profile>> GetAllAsync()
+        public async Task<IEnumerable<Profile>> GetAllProfilesAsync()
         {
             return await _context.Profile.ToListAsync();
         }

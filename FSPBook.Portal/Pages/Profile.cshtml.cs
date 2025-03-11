@@ -20,22 +20,20 @@ namespace FSPBook.Portal.Pages
         }
 
         public ProfileDto Profile { get; set; }
-        public List<PostDto> Posts { get; set; } = new();
+        public List<PostDto> Posts { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            // Fetch the profile
-            var profile = await _profileRepository.GetProfileByIdAsync(id);
-            if (profile == null)
+            // Fetch user profile by Id
+            var userProfile = await _profileRepository.GetProfileByIdAsync(id);
+            if (userProfile == null)
             {
                 return NotFound();
             }
-            else
-            {
-                Profile = ProfileDto.FromProfile(profile);
-            }
 
-            // Fetch the latest posts for the profile
+            Profile = ProfileDto.FromProfile(userProfile);
+
+            // Fetch all posts by user in descending order
             var posts = await _postRepository.GetPostsByAuthorIdAsync(id);
             Posts = posts.Select(PostDto.FromPost).ToList();
 

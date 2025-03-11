@@ -15,20 +15,20 @@ namespace FSPBook.Data.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(Post post)
+        public async Task AddPostAsync(Post post)
         {
             await _context.Post.AddAsync(post);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Post>> GetAllAsync()
+        public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
             return await _context.Post
                 .Include(p => p.Author)
                 .ToListAsync();
         }
 
-        public async Task<Post> GetByIdAsync(int id)
+        public async Task<Post> GetPostByIdAsync(int id)
         {
             Post post = await _context.Post
                             .Include(p => p.Author)

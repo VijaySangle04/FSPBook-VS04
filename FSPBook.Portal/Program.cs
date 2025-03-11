@@ -1,9 +1,9 @@
 using FSPBook.Data;
 using FSPBook.Data.Repositories;
+using FSPBook.Data.Utilities;
 using FSPBook.Services.News;
 using FSPBook.Services.Posts;
 using FSPBook.Services.Profiles;
-using FSPBook.Data.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,9 +21,9 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<INewsApiClient, NewsApiClient>();
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<INewsService, TechnologyNewsService>();
-builder.Services.AddScoped<CreatePostService>();
-builder.Services.AddScoped<GetPostsService>();
-builder.Services.AddScoped<GetProfilesService>();
+builder.Services.AddScoped<ICreatePostService, CreatePostService>();
+builder.Services.AddScoped<IGetPostsService, GetPostsService>();
+builder.Services.AddScoped<IGetProfilesService, GetProfilesService>();
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
