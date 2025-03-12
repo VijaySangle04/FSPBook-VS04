@@ -36,7 +36,3 @@ FSP think Yammer is overcomplicated and have decided to implement their own, sim
 - You are free to use any libraries that you need.
 - We will be looking at your coding style. You may want to install something that will enforce consistent coding style.
 - We will discuss your solutions and explore how you have gone about the tasks in your interview.
-
-- Caching
-- Retry
-- Logging
