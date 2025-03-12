@@ -11,7 +11,7 @@
 <form method="post">
     <div class="form-group">
         <label>Post on behalf of:</label>
-        <select asp-for="ProfileId" class="d-block w-50">
+        <select asp-for="ProfileId" class="d-block w-50" onchange="clearContentInput()">
             <option selected value="-1">Select</option>
             @foreach (var profile in Model.Profiles)
             {
@@ -43,5 +43,9 @@
                 successMessage.style.display = 'none';
             }, 5000);
         });
+
+        function clearContentInput() {
+            document.getElementById('ContentInput').value = '';
+        }
     </script>
 }

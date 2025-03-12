@@ -38,30 +38,25 @@ namespace FSPBook.Services.News
         public async Task<IEnumerable<NewsArticle>> GetTopHeadlinesAsync(int limit)
         {
             var cacheKey = $"TechHeadlines_{limit}";
-
-            return await _cacheService.GetOrAddAsync(cacheKey, async () =>
+            HttpResponseMessage? response = null;
+            try
             {
-                HttpResponseMessage? response = null;
-                try
+                return await _cacheService.GetOrAddAsync(cacheKey, async () =>
                 {
+
+
                     response = await _retryPolicy.ExecuteAsync(() =>
                                     _circuitBreakerPolicy.ExecuteAsync(() => _newsApiClient.GetTopHeadlinesAsync(limit)));
-
-                }
-                catch (BrokenCircuitException ex)
-                {
-                    _logger.LogError(ex, "Circuit breaker is open. Unable to connect to the News Api.");
-                }
-
-                if (response == null || !response.IsSuccessStatusCode)
-                {
-                    return new List<NewsArticle>();
-                }
-
-                var content = await response?.Content?.ReadAsStringAsync();
-                var newsResponse = JsonSerializer.Deserialize<NewsResponse>(content);
-                return newsResponse?.Data ?? new List<NewsArticle>();
-            }, TimeSpan.FromMinutes(10));
+                    var content = await response?.Content?.ReadAsStringAsync();
+                    var newsResponse = JsonSerializer.Deserialize<NewsResponse>(content);
+                    return newsResponse?.Data;
+                }, TimeSpan.FromMinutes(5));
+            }
+            catch (BrokenCircuitException ex)
+            {
+                _logger.LogError(ex, "Circuit breaker is open. Unable to connect to the News Api.");
+            }
+            return new List<NewsArticle>();
         }
     }
 

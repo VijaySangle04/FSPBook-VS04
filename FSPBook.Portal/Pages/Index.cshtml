@@ -16,8 +16,8 @@
                     <li class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>
-                                <a asp-page="/Profile" 
-                                asp-route-id="@post.AuthorId">@post.AuthorName</a>
+                                <a asp-page="/Profile"
+                                   asp-route-id="@post.AuthorId">@post.AuthorName</a>
                             </h5>
                             <small class="text-info">@post.DateTimePosted.ToString("f")</small>
                         </div>
@@ -38,24 +38,24 @@
                     @if (Model.CurrentPage > 1)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page="/Index" 
-                            asp-route-currentPage="@(Model.CurrentPage - 1)">Previous</a>
+                            <a class="page-link" asp-page="/Index"
+                               asp-route-currentPage="@(Model.CurrentPage - 1)">Previous</a>
                         </li>
                     }
 
                     @for (int pageno = 1; pageno <= Model.TotalPages; pageno++)
                     {
                         <li class="page-item @(pageno == Model.CurrentPage ? "active" : "")">
-                            <a class="page-link" 
-                            asp-page="/Index" asp-route-currentPage="@pageno">@pageno</a>
+                            <a class="page-link"
+                               asp-page="/Index" asp-route-currentPage="@pageno">@pageno</a>
                         </li>
                     }
 
                     @if (Model.CurrentPage < Model.TotalPages)
                     {
                         <li class="page-item">
-                            <a class="page-link" asp-page="/Index" 
-                            asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a>
+                            <a class="page-link" asp-page="/Index"
+                               asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a>
                         </li>
                     }
                 </ul>
@@ -79,7 +79,11 @@
         }
         else
         {
-            <p>No news available at the moment.</p>
+            <ul class="list-group">
+                <li class="list-group-item text-info text-center">
+                    <p>No news feed available at the moment.</p>
+                </li>
+            </ul>
         }
     </div>
 </div>
