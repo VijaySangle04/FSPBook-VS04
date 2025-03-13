@@ -21,7 +21,7 @@
                             </h5>
                             <small class="text-info">@post.DateTimePosted.ToString("f")</small>
                         </div>
-                        <p>@post.Content</p>
+                        <pre style="white-space: pre-wrap; max-height: 7.5em; overflow: auto">@post.Content</pre>
                     </li>
                 }
             </ul>
@@ -43,11 +43,38 @@
                         </li>
                     }
 
-                    @for (int pageno = 1; pageno <= Model.TotalPages; pageno++)
+                    @if (Model.TotalPages <= 7)
                     {
-                        <li class="page-item @(pageno == Model.CurrentPage ? "active" : "")">
-                            <a class="page-link"
-                               asp-page="/Index" asp-route-currentPage="@pageno">@pageno</a>
+                        @for (int pageno = 1; pageno <= Model.TotalPages; pageno++)
+                        {
+                            <li class="page-item @(pageno == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                                   asp-page="/Index" asp-route-currentPage="@pageno">@pageno</a>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="page-item @(1 == Model.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-page="/Index" asp-route-currentPage="1">1</a>
+                        </li>
+                        @if (Model.CurrentPage > 4)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                        @for (int pageno = Math.Max(2, Model.CurrentPage - 2); pageno <= Math.Min(Model.TotalPages - 1, Model.CurrentPage + 2); pageno++)
+                        {
+                            <li class="page-item @(pageno == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                                   asp-page="/Index" asp-route-currentPage="@pageno">@pageno</a>
+                            </li>
+                        }
+                        @if (Model.CurrentPage < Model.TotalPages - 3)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+                        <li class="page-item @(Model.TotalPages == Model.CurrentPage ? "active" : "")">
+                            <a class="page-link" asp-page="/Index" asp-route-currentPage="@Model.TotalPages">@Model.TotalPages</a>
                         </li>
                     }
 
@@ -66,24 +93,26 @@
     <!-- News -->
     <div class="col-md-4">
         <h1>News Feed</h1>
-        @if (Model.NewsArticles.Any())
-        {
-            <ul class="list-group">
-                @foreach (var article in Model.NewsArticles)
-                {
-                    <li class="list-group-item">
-                        <a href="@article.Url" target="_blank">@article.Title</a>
+        <div id="newsDiv">
+            @if (Model.NewsArticles.Any())
+            {
+                <ul class="list-group">
+                    @foreach (var article in Model.NewsArticles)
+                    {
+                        <li class="list-group-item">
+                            <a href="@article.Url" target="_blank">@article.Title</a>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <ul class="list-group">
+                    <li class="list-group-item text-info text-center">
+                        <p>No news feed available at the moment.</p>
                     </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <ul class="list-group">
-                <li class="list-group-item text-info text-center">
-                    <p>No news feed available at the moment.</p>
-                </li>
-            </ul>
-        }
+                </ul>
+            }
+        </div>
     </div>
 </div>

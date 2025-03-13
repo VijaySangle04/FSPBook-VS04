@@ -9,7 +9,7 @@
         <h1>@Model.Profile.FullName</h1>
         <h4>@Model.Profile.JobTitle</h4>
     </div>
-    <h3 class="mt-4">Recent Posts</h3>
+    <h3 class="mt-4" style="text-align:center">Recent Posts</h3>
     @if (Model.Posts.Any())
     {
         <ul class="list-group">
@@ -20,7 +20,7 @@
                         @post.DateTimePosted.ToString("f")
                     </small>
                     <br />
-                    <p>@post.Content</p>
+                    <pre style="white-space: pre-wrap; max-height: 7.5em; overflow: auto">@post.Content</pre>
                 </li>
             }
         </ul>

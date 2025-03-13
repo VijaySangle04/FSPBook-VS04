@@ -4,18 +4,19 @@ using Polly.Retry;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Logging;
+using FSPBook.Services.Caching;
 
 namespace FSPBook.Services.News
 {
     public class TechnologyNewsService : INewsService
     {
-        private readonly ICacheService _cacheService;
+        private readonly ICacheService<NewsArticle> _cacheService;
         private readonly INewsApiClient _newsApiClient;
         private readonly ILogger<TechnologyNewsService> _logger;
         private readonly AsyncRetryPolicy<HttpResponseMessage> _retryPolicy;
         private readonly AsyncCircuitBreakerPolicy<HttpResponseMessage> _circuitBreakerPolicy;
 
-        public TechnologyNewsService(ICacheService cacheService, INewsApiClient newsApiClient, ILogger<TechnologyNewsService> logger)
+        public TechnologyNewsService(ICacheService<NewsArticle> cacheService, INewsApiClient newsApiClient, ILogger<TechnologyNewsService> logger)
         {
             _cacheService = cacheService;
             _newsApiClient = newsApiClient;
@@ -27,7 +28,7 @@ namespace FSPBook.Services.News
 
             _circuitBreakerPolicy = Policy.Handle<HttpRequestException>()
                 .OrResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                .CircuitBreakerAsync(2, TimeSpan.FromMinutes(1));
+                .CircuitBreakerAsync(2, TimeSpan.FromMinutes(5));
         }
 
         /// <summary>
@@ -43,8 +44,6 @@ namespace FSPBook.Services.News
             {
                 return await _cacheService.GetOrAddAsync(cacheKey, async () =>
                 {
-
-
                     response = await _retryPolicy.ExecuteAsync(() =>
                                     _circuitBreakerPolicy.ExecuteAsync(() => _newsApiClient.GetTopHeadlinesAsync(limit)));
                     var content = await response?.Content?.ReadAsStringAsync();

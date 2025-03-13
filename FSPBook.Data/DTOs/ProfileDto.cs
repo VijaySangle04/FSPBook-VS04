@@ -13,7 +13,7 @@ namespace FSPBook.Data.DTOs
             return new ProfileDto
             {
                 Id = profile.Id,
-                FullName = $"{profile.FirstName} {profile.LastName}",
+                FullName = profile.FullName,
                 JobTitle = profile.JobTitle
             };
         }

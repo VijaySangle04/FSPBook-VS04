@@ -1,6 +1,7 @@
 using FSPBook.Data;
 using FSPBook.Data.Repositories;
 using FSPBook.Data.Utilities;
+using FSPBook.Services.Caching;
 using FSPBook.Services.News;
 using FSPBook.Services.Posts;
 using FSPBook.Services.Profiles;
@@ -18,14 +19,18 @@ builder.Services.AddDbContext<Context>(options =>
                                         options.UseInMemoryDatabase("FSPBookDataBase"));
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IPostRepository, PostRepository>();
-builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
-builder.Services.AddScoped<INewsApiClient, NewsApiClient>();
-builder.Services.AddScoped<ICacheService, CacheService>();
-builder.Services.AddScoped<INewsService, TechnologyNewsService>();
-builder.Services.AddScoped<ICreatePostService, CreatePostService>();
 builder.Services.AddScoped<IGetPostsService, GetPostsService>();
+builder.Services.AddScoped<ICreatePostService, CreatePostService>();
+
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IGetProfilesService, GetProfilesService>();
+
+builder.Services.AddScoped<INewsApiClient, NewsApiClient>();
+builder.Services.AddScoped<INewsService, TechnologyNewsService>();
+builder.Services.AddScoped<ICacheService<NewsArticle>, CacheService<NewsArticle>>();
+
 builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

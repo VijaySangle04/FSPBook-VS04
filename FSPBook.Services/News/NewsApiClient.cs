@@ -5,10 +5,12 @@ namespace FSPBook.Services.News
     public class NewsApiClient : INewsApiClient
     {
         private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public NewsApiClient(IConfiguration configuration)
+        public NewsApiClient(IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<HttpResponseMessage> GetTopHeadlinesAsync(int limit)
@@ -21,9 +23,9 @@ namespace FSPBook.Services.News
                       $"api_token={apiToken}" +
                       $"&categories={categories}" +
                       $"&language={language}" +
-                      $"&limit={limit}";
+            $"&limit={limit}";
 
-            var client = new HttpClient();
+            var client = _httpClientFactory.CreateClient();
             return await client.GetAsync(url);
         }
     }

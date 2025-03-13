@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FSPBook.Services.Caching;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Text.Json;
 
@@ -7,7 +8,7 @@ namespace FSPBook.Services.News.Tests
     [TestClass]
     public class TechnologyNewsServiceTests
     {
-        private Mock<ICacheService> _mockCacheService;
+        private Mock<ICacheService<NewsArticle>> _mockCacheService;
         private Mock<INewsApiClient> _mockNewsApiClient;
         private Mock<ILogger<TechnologyNewsService>> _mockLogger;
         private TechnologyNewsService _service;
@@ -15,7 +16,7 @@ namespace FSPBook.Services.News.Tests
         [TestInitialize]
         public void Setup()
         {
-            _mockCacheService = new Mock<ICacheService>();
+            _mockCacheService = new Mock<ICacheService<NewsArticle>>();
             _mockNewsApiClient = new Mock<INewsApiClient>();
             _mockLogger = new Mock<ILogger<TechnologyNewsService>>();
             _service = new TechnologyNewsService(_mockCacheService.Object, _mockNewsApiClient.Object, _mockLogger.Object);

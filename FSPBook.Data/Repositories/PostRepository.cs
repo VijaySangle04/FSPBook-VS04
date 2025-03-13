@@ -23,7 +23,7 @@ namespace FSPBook.Data.Repositories
 
         public async Task<IEnumerable<Post>> GetAllPostsAsync()
         {
-            if(_context.Post == null || _context.Post.Count() == 0)
+            if(_context.Post == null || !_context.Post.Any())
             {
                 return null;
             }
@@ -34,7 +34,7 @@ namespace FSPBook.Data.Repositories
 
         public async Task<Post> GetPostByIdAsync(int id)
         {
-            if (_context.Post == null || _context.Post.Count() == 0)
+            if (_context.Post == null || !_context.Post.Any())
             {
                 return null;
             }
@@ -46,7 +46,7 @@ namespace FSPBook.Data.Repositories
 
         public async Task<IEnumerable<Post>> GetPostsByAuthorIdAsync(int authorId)
         {
-            if (_context.Post == null || _context.Post.Count() == 0)
+            if (_context.Post == null || !_context.Post.Any())
             {
                 return null;
             }
@@ -67,7 +67,7 @@ namespace FSPBook.Data.Repositories
         public async Task<(IEnumerable<Post> Posts, int TotalCount)> 
             GetPaginatedPostsAsync(int page, int pageSize)
         {
-            if (_context.Post == null || _context.Post.Count() == 0)
+            if (_context.Post == null || !_context.Post.Any())
             {
                 return (null, 0);
             }

@@ -18,7 +18,7 @@ namespace FSPBook.Data.DTOs
                 Id = post.Id,
                 Content = post.Content,
                 AuthorId = post.AuthorId,
-                AuthorName = $"{post.Author.FirstName} {post.Author.LastName}",
+                AuthorName = post.Author.FullName,
                 DateTimePosted = post.DateTimePosted
             };
         }

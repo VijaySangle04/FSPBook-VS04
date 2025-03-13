@@ -47,16 +47,18 @@ namespace FSPBook.Pages
         /// Validate and Create a post
         /// </summary>
         /// <returns></returns>
-        public async Task OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (ProfileId != -1)
+            if (ModelState.IsValid)
             {
                 var postId = await _createPostService
                     .CreatePostAsync(ProfileId, ContentInput);
                 Success = true;
+                ModelState.Clear();
             }
-
+            ContentInput = string.Empty;
             await LoadProfiles();
+            return Page();
         }
 
         /// <summary>

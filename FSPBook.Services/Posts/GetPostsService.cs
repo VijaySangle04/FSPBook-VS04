@@ -33,10 +33,10 @@ namespace FSPBook.Services.Posts
             {
                 Id = post.Id,
                 Content = post.Content,
-                AuthorName = $"{post.Author.FirstName} {post.Author.LastName}",
+                AuthorName = post.Author.FullName,
                 DateTimePosted = post.DateTimePosted,
                 AuthorId = post.AuthorId
-            }).ToList();
+            })?.ToList();
 
             return new GetPostsResult
             {
