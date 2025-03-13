@@ -34,7 +34,7 @@ namespace FSPBook.Data.Utilities
                         new Post { Id = 2, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 15, 0, 0, TimeSpan.Zero), AuthorId = 2 },
                     };
 
-                    for ( int i = 0; i <= 100; i = i+4)
+                    for ( int i = 0; i <= 100; i += 4)
                     {
                         posts.Add(new Post { Id = i + 3, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 1 });
                         posts.Add(new Post { Id = i + 4, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 2 });

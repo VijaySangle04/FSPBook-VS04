@@ -72,5 +72,8 @@ namespace FSPBook.Services.News
 
         [JsonPropertyName("url")]
         public string Url { get; set; } = string.Empty;
+
+        [JsonPropertyName("image_url")]
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }
