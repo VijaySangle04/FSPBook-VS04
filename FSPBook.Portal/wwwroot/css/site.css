@@ -75,3 +75,25 @@ body {
 .field-validation-error {
   color: red;
 }
+
+/* Custom styles for the application */
+.pre-wrap {
+    white-space: pre-wrap;
+    max-height: 7.5em;
+    overflow: auto;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.img-thumbnail-custom {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.padding-left-10 {
+    padding-left: 10px;
+}
+
+.no-resize {
+    resize: none;
+}

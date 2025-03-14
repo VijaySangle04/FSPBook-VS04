@@ -21,7 +21,7 @@
                             </h5>
                             <small class="text-info">@post.DateTimePosted.ToString("f")</small>
                         </div>
-                        <pre style="white-space: pre-wrap; max-height: 7.5em; overflow: auto">@post.Content</pre>
+                        <pre class="pre-wrap">@post.Content</pre>
                     </li>
                 }
             </ul>
@@ -101,8 +101,8 @@
                     {
                         <li class="list-group-item">
                             <div class="d-flex justify-content-between align-items-center">
-                                <img src="@article.ImageUrl" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
-                                <a href="@article.Url" target="_blank">@article.Title</a>
+                                <img src="@article.ImageUrl" class="img-thumbnail img-thumbnail-custom" />
+                                <a href="@article.Url" target="_blank" class="padding-left-10">@article.Title</a>
                             </div>
                         </li>
                     }
