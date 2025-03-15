@@ -60,6 +60,12 @@ stages:
         - script: |
             dotnet test --configuration $(buildConfiguration) --logger "trx;LogFileName=test_results.trx" --results-directory "$(testResultsPath)"
           displayName: 'Run MSTests and Generate TRX Report'
+        
+        - task: PublishBuildArtifacts@1
+          displayName: "Publish Artifact"
+          inputs:
+            pathToPublish: "$(testResultsPath)"
+            artifactName: "testResults"
 
   - stage: DeployInfrastructure
     displayName: "Stage3 - Deploy Azure Infrastructure"
