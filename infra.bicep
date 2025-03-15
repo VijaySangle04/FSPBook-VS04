@@ -24,3 +24,5 @@ resource webApp 'Microsoft.Web/sites@2024-04-01' = {
     serverFarmId: appServicePlan.id
   }
 }
+
+output webAppUrl string = webApp.properties.defaultHostName
