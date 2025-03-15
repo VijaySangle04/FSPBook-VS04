@@ -35,13 +35,13 @@ namespace FSPBook.Data.Utilities
                     };
 
                     // Uncomment to seed more posts to test pagination
-                    //for ( int i = 0; i <= 100; i += 4)
-                    //{
-                    //    posts.Add(new Post { Id = i + 3, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 1 });
-                    //    posts.Add(new Post { Id = i + 4, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 2 });
-                    //    posts.Add(new Post { Id = i + 5, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 3 });
-                    //    posts.Add(new Post { Id = i + 6, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 4 });
-                    //}
+                    for (int i = 0; i <= 100; i += 4)
+                    {
+                        posts.Add(new Post { Id = i + 3, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 1 });
+                        posts.Add(new Post { Id = i + 4, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 2 });
+                        posts.Add(new Post { Id = i + 5, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 3 });
+                        posts.Add(new Post { Id = i + 6, Content = exampleText, DateTimePosted = new DateTimeOffset(2020, 11, 1, 10, 0, 0, TimeSpan.Zero), AuthorId = 4 });
+                    }
 
                     context.Post.AddRange(posts);
 
