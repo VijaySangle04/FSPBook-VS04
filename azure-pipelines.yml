@@ -13,9 +13,12 @@ variables:
   appServicePlanName: "appserviceplan-fspbook-dzaaum2rhftxw"
   webAppName: "vjazfspbookblazorapp"
   artifactName: "drop"
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'windows-latest'
 
 stages:
   - stage: BuildStage
@@ -42,6 +45,13 @@ stages:
             inputs:
               pathToPublish: "$(Build.ArtifactStagingDirectory)/publish"
               artifactName: "$(artifactName)"
+          
+          - task: VSBuild@1
+            displayName: 'Build Solution'
+            inputs:
+              solution: '$(solution)'
+              platform: '$(buildPlatform)'
+              configuration: '$(buildConfiguration)'
   
   - stage: TestBuildJob
     displayName: "Stage2 - Test Code"
@@ -50,12 +60,21 @@ stages:
         displayName: "Job2 - Run Test"
         steps:
         - task: VSTest@3
+          displayName: 'Run MSTests'
           inputs:
             testSelector: 'testAssemblies'
-            testAssemblyVer2: |
-              **\bin\**\*test.dll
-              **\bin\**\*tests.dll
+            testAssemblyVer2: '**\bin\$(buildConfiguration)\**\*Test.dll'
             searchFolder: '$(System.DefaultWorkingDirectory)'
+            platform: '$(buildPlatform)'
+            configuration: '$(buildConfiguration)'
+
+        - task: PublishTestResults@2
+          displayName: 'Publish MSTest Results'
+          inputs:
+            testResultsFormat: 'VSTest'
+            testResultsFiles: '**/TestResults/*.trx'
+            mergeTestResults: true
+            failTaskOnFailedTests: true
 
   - stage: DeployInfrastructure
     displayName: "Stage3 - Deploy Azure Infrastructure"
