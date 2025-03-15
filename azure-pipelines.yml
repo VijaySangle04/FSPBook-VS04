@@ -33,7 +33,7 @@ stages:
               version: "6.x"
           
           - script: |
-              dotnet publish -c Release -o ${Build.ArtifactStagingDirectory}/publish
+              dotnet publish -c Release -o $(Build.ArtifactStagingDirectory)/publish
             displayName: "Build and Publish App"
             workingDirectory: "FSPBook.Portal"
           
