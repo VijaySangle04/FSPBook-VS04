@@ -39,7 +39,6 @@ stages:
           - script: |
               dotnet build -c Release -o $(Build.ArtifactStagingDirectory)
             displayName: "Build Solution"
-            workingDirectory: "FSPBook"
 
           - script: |
               dotnet publish -c Release -o $(Build.ArtifactStagingDirectory)/publish
@@ -61,7 +60,6 @@ stages:
         - script: |
             dotnet test --configuration $(buildConfiguration) --logger "trx;LogFileName=test_results.trx" --results-directory "$(testResultsPath)"
           displayName: 'Run MSTests and Generate TRX Report'
-          workingDirectory: "FSPBook"
 
   - stage: DeployInfrastructure
     displayName: "Stage3 - Deploy Azure Infrastructure"
