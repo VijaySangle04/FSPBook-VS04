@@ -16,9 +16,10 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  testResultsPath: '$(Build.ArtifactStagingDirectory)/TestResults'
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: ubuntu-latest
 
 stages:
   - stage: BuildStage
@@ -35,14 +36,11 @@ stages:
               packageType: sdk
               version: "6.x"
           
-          - task: NuGetToolInstaller@1
-            displayName: 'Install NuGet'
+          - script: |
+              dotnet build -c Release -o $(Build.ArtifactStagingDirectory)
+            displayName: "Build Solution"
+            workingDirectory: "FSPBook"
 
-          - task: NuGetCommand@2
-            displayName: 'Restore NuGet Packages'
-            inputs:
-              restoreSolution: '$(solution)'
-          
           - script: |
               dotnet publish -c Release -o $(Build.ArtifactStagingDirectory)/publish
             displayName: "Build and Publish App"
@@ -53,13 +51,6 @@ stages:
             inputs:
               pathToPublish: "$(Build.ArtifactStagingDirectory)/publish"
               artifactName: "$(artifactName)"
-          
-          - task: VSBuild@1
-            displayName: 'Build Solution'
-            inputs:
-              solution: '$(solution)'
-              platform: '$(buildPlatform)'
-              configuration: '$(buildConfiguration)'
   
   - stage: TestBuildJob
     displayName: "Stage2 - Test Code"
@@ -67,22 +58,10 @@ stages:
       - job: TestCode
         displayName: "Job2 - Run Test"
         steps:
-        - task: VSTest@3
-          displayName: 'Run MSTests'
-          inputs:
-            testSelector: 'testAssemblies'
-            testAssemblyVer2: 'FSPBook.Tests\bin\$(buildConfiguration)\net6.0\FSPBook.Tests.dll'
-            searchFolder: '$(System.DefaultWorkingDirectory)'
-            platform: '$(buildPlatform)'
-            configuration: '$(buildConfiguration)'
-
-        - task: PublishTestResults@2
-          displayName: 'Publish MSTest Results'
-          inputs:
-            testResultsFormat: 'VSTest'
-            testResultsFiles: '**/TestResults/*.trx'
-            mergeTestResults: true
-            failTaskOnFailedTests: true
+        - script: |
+            dotnet test --configuration $(buildConfiguration) --logger "trx;LogFileName=test_results.trx" --results-directory "$(testResultsPath)"
+          displayName: 'Run MSTests and Generate TRX Report'
+          workingDirectory: "FSPBook"
 
   - stage: DeployInfrastructure
     displayName: "Stage3 - Deploy Azure Infrastructure"
