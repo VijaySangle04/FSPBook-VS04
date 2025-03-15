@@ -1,14 +1,8 @@
-param location string = 'westeurope'
-param rgName string = 'myResourceGroup'
-param appServicePlanName string = 'myAppServicePlan'
-param webAppName string = 'myWebApp'
+param location string = resourceGroup().location
+param appServicePlanName string
+param webAppName string
 
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: rgName
-  location: location
-}
-
-resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: appServicePlanName
   location: location
   properties: {
@@ -23,7 +17,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2021-02-01' = {
   }
 }
 
-resource webApp 'Microsoft.Web/sites@2021-02-01' = {
+resource webApp 'Microsoft.Web/sites@2024-04-01' = {
   name: webAppName
   location: location
   properties: {

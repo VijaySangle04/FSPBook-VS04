@@ -68,7 +68,7 @@ stages:
                 az deployment group create \
                   --resource-group $(resourceGroupName) \
                   --template-file infra.bicep \
-                  --parameters location=$(location) appServicePlanName=$(appServicePlanName) webAppName=$(webAppName)
+                  --parameters appServicePlanName=$(appServicePlanName) webAppName=$(webAppName)
 
   - stage: DeployAppStage
     displayName: "Stage3 - Deploy Blazor App on Azure"
