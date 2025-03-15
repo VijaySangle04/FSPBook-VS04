@@ -71,7 +71,7 @@ stages:
           displayName: 'Run MSTests'
           inputs:
             testSelector: 'testAssemblies'
-            testAssemblyVer2: '**\bin\$(buildConfiguration)\**\FSPBook.Tests.dll'
+            testAssemblyVer2: 'FSPBook.Tests\bin\$(buildConfiguration)\net6.0\FSPBook.Tests.dll'
             searchFolder: '$(System.DefaultWorkingDirectory)'
             platform: '$(buildPlatform)'
             configuration: '$(buildConfiguration)'
