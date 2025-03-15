@@ -42,12 +42,26 @@ stages:
             inputs:
               pathToPublish: "$(Build.ArtifactStagingDirectory)/publish"
               artifactName: "$(artifactName)"
+  
+  - stage: TestBuildJob
+    displayName: "Stage2 - Test Code"
+    jobs:
+      - job: TestCode
+        displayName: "Job2 - Run Test"
+        steps:
+        - task: VSTest@3
+          inputs:
+            testSelector: 'testAssemblies'
+            testAssemblyVer2: |
+              **\bin\**\*test.dll
+              **\bin\**\*tests.dll
+            searchFolder: '$(System.DefaultWorkingDirectory)'
 
   - stage: DeployInfrastructure
-    displayName: "Stage2 - Deploy Azure Infrastructure"
+    displayName: "Stage3 - Deploy Azure Infrastructure"
     jobs:
       - job: DeployInfraJob
-        displayName: "Job2 - Deploy RG, App Service Plan and Web App"
+        displayName: "Job3 - Deploy RG, App Service Plan and Web App"
         steps:
           - task: AzureCLI@2
             displayName: "Create Resource Group"
@@ -71,10 +85,10 @@ stages:
                   --parameters appServicePlanName=$(appServicePlanName) webAppName=$(webAppName)
 
   - stage: DeployAppStage
-    displayName: "Stage3 - Deploy Blazor App on Azure"
+    displayName: "Stage4 - Deploy Blazor App on Azure"
     jobs:
       - job: DeployAppJob
-        displayName: 'Job3 - Deploy Blazor App on Azure'
+        displayName: 'Job4 - Deploy Blazor App on Azure'
         steps:
           - checkout: self
           - task: DownloadBuildArtifacts@1
