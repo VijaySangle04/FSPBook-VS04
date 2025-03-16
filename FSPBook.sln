@@ -18,6 +18,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSPBook.Services", "FSPBook
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSPBook.Tests", "FSPBook.Tests\FSPBook.Tests.csproj", "{AE7A2049-A64E-43FD-BFB0-17D0E5800652}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{A4650DF0-841F-43E7-86DE-9979A6C7F42B}"
+	ProjectSection(SolutionItems) = preProject
+		build.yml = build.yml
+		deploy-app.yml = deploy-app.yml
+		deploy-infra.yml = deploy-infra.yml
+		test.yml = test.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +51,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A4650DF0-841F-43E7-86DE-9979A6C7F42B} = {AA509EA0-8C70-40B0-9EE8-6504E1AC7D03}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42E985D4-8AAB-482F-A45D-92929A2FACB0}
