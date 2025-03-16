@@ -6,9 +6,6 @@
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
-
 variables:
   azureSubscription: 'vjazbasicsubscription(b192d1c3-cd31-4c42-9998-71c20e0900e6)'
   resourceGroupName: "vjazrgFSPBook"
@@ -21,42 +18,102 @@ variables:
   buildConfiguration: 'Release'
   testResultsPath: '$(Build.ArtifactStagingDirectory)/TestResults'
 
+pool:
+  vmImage: ubuntu-latest
+
 stages:
   - stage: BuildStage
     displayName: "Stage1 - Build Blazor App"
     jobs:
-      - template: templates/build.yml
-        parameters:
-          artifactName: "$(artifactName)"
-          buildConfiguration: "$(buildConfiguration)"
+      - job: BuildJob
+        displayName: "Job1 - Build App and Create Artifact"
+        steps:
+          - checkout: self
+
+          - task: UseDotNet@2
+            displayName: "Install .NET 6 SDK"
+            inputs:
+              packageType: sdk
+              version: "6.x"
+          
+          - script: |
+              dotnet build -c Release -o $(Build.ArtifactStagingDirectory)
+            displayName: "Build Solution"
+
+          - script: |
+              dotnet publish -c Release -o $(Build.ArtifactStagingDirectory)/publish
+            displayName: "Build and Publish App"
+            workingDirectory: "FSPBook.Portal"
+          
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact"
+            inputs:
+              pathToPublish: "$(Build.ArtifactStagingDirectory)/publish"
+              artifactName: "$(artifactName)"
   
   - stage: TestBuildJob
     displayName: "Stage2 - Test Code"
     jobs:
-      - template: templates/test.yml
-        parameters:
-          buildConfiguration: "$(buildConfiguration)"
-          testResultsPath: "$(testResultsPath)"
+      - job: TestCode
+        displayName: "Job2 - Run Test"
+        steps:
+        - script: |
+            dotnet test --configuration $(buildConfiguration) --logger "trx;LogFileName=test_results.trx" --results-directory "$(testResultsPath)"
+          displayName: 'Run MSTests and Generate TRX Report'
+        
+        - task: PublishBuildArtifacts@1
+          displayName: "Publish Artifact"
+          inputs:
+            pathToPublish: "$(testResultsPath)"
+            artifactName: "testResults"
 
   - stage: DeployInfrastructure
     displayName: "Stage3 - Deploy Azure Infrastructure"
     jobs:
-      - template: templates/deploy-infra.yml
-        parameters:
-          azureSubscription: "$(azureSubscription)"
-          resourceGroupName: "$(resourceGroupName)"
-          location: "$(location)"
-          appServicePlanName: "$(appServicePlanName)"
-          webAppName: "$(webAppName)"
+      - job: DeployInfraJob
+        displayName: "Job3 - Deploy RG, App Service Plan and Web App"
+        steps:
+          - task: AzureCLI@2
+            displayName: "Create Resource Group"
+            inputs:
+              azureSubscription: $(azureSubscription)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                az group create --name $(resourceGroupName) --location $(location)
+
+          - task: AzureCLI@2
+            displayName: "Deploy Bicep"
+            inputs:
+              azureSubscription: $(azureSubscription)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az deployment group create \
+                  --resource-group $(resourceGroupName) \
+                  --template-file infra.bicep \
+                  --parameters appServicePlanName=$(appServicePlanName) webAppName=$(webAppName)
 
   - stage: DeployAppStage
     displayName: "Stage4 - Deploy Blazor App on Azure"
     jobs:
-      - template: templates/deploy-app.yml
-        parameters:
-          azureSubscription: "$(azureSubscription)"
-          webAppName: "$(webAppName)"
-          artifactName: "$(artifactName)"
+      - job: DeployAppJob
+        displayName: 'Job4 - Deploy Blazor App on Azure'
+        steps:
+          - checkout: self
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download Artifact'
+            inputs:
+              artifactName: "$(artifactName)"
+              downloadPath: "$(Build.ArtifactStagingDirectory)"
+          
+          - task: AzureWebApp@1
+            displayName: "Deploy Blazor App to Web App"
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appName: "$(webAppName)"
+              package: "$(Build.ArtifactStagingDirectory)/$(artifactName)"
+              appType: webApp
 
 
             
