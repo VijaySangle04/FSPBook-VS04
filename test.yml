@@ -1,0 +1,17 @@
+parameters:
+  buildConfiguration: ""
+  testResultsPath: ""
+
+jobs:
+  - job: TestCode
+    displayName: "Job2 - Run Test"
+    steps:
+      - script: |
+            dotnet test --configuration "${{ parameters.buildConfiguration }}" --logger "trx;LogFileName=test_results.trx" --results-directory "${{ parameters.testResultsPath }}"
+        displayName: 'Run MSTests and Generate TRX Report'
+        
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact"
+        inputs:
+          pathToPublish: "${{ parameters.testResultsPath }}"
+          artifactName: "testResults"

@@ -17,7 +17,7 @@ jobs:
       - task: AzureWebApp@1
         displayName: "Deploy Blazor App to Web App"
         inputs:
-            azureSubscription: ${{ parameters.azureSubscription }}
+            azureSubscription: "${{ parameters.azureSubscription }}"
             appName: "${{ parameters.webAppName }}"
             package: "$(Build.ArtifactStagingDirectory)/${{ parameters.artifactName }}"
             appType: webApp

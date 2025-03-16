@@ -15,11 +15,11 @@ jobs:
             version: "6.x"
           
       - script: |
-            dotnet build -c ${{ parameters.buildConfiguration }} -o $(Build.ArtifactStagingDirectory)
+            dotnet build -c "${{ parameters.buildConfiguration }}" -o "$(Build.ArtifactStagingDirectory)"
         displayName: "Build Solution"
 
       - script: |
-            dotnet publish -c ${{ parameters.buildConfiguration }} -o $(Build.ArtifactStagingDirectory)/publish
+            dotnet publish -c "${{ parameters.buildConfiguration }}" -o "$(Build.ArtifactStagingDirectory)/publish"
         displayName: "Build and Publish App"
         workingDirectory: "FSPBook.Portal"
           
