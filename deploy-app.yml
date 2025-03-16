@@ -1,0 +1,23 @@
+parameters:
+  azureSubscription: "$(azureSubscription)"
+  webAppName: "$(webAppName)"
+  artifactName: "$(artifactName)"
+
+jobs:
+  - job: DeployAppJob
+    displayName: 'Job4 - Deploy Blazor App on Azure'
+    steps:
+      - checkout: self
+      - task: DownloadBuildArtifacts@1
+        displayName: 'Download Artifact'
+        inputs:
+            artifactName: "$(artifactName)"
+            downloadPath: "$(Build.ArtifactStagingDirectory)"
+          
+      - task: AzureWebApp@1
+        displayName: "Deploy Blazor App to Web App"
+        inputs:
+            azureSubscription: $(azureSubscription)
+            appName: "$(webAppName)"
+            package: "$(Build.ArtifactStagingDirectory)/$(artifactName)"
+            appType: webApp

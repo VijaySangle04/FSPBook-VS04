@@ -9,26 +9,54 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  azureSubscription: 'vjazbasicsubscription(b192d1c3-cd31-4c42-9998-71c20e0900e6)'
+  resourceGroupName: "vjazrgFSPBook"
+  location: "eastus2"
+  appServicePlanName: "appserviceplan-fspbook-dzaaum2rhftxw"
+  webAppName: "vjazfspbookblazorapp"
+  artifactName: "drop"
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  testResultsPath: '$(Build.ArtifactStagingDirectory)/TestResults'
+
 stages:
   - stage: BuildStage
     displayName: "Stage1 - Build Blazor App"
     jobs:
       - template: templates/build.yml
+        parameters:
+          artifactName: "$(artifactName)"
+          buildConfiguration: "$(buildConfiguration)"
   
   - stage: TestBuildJob
     displayName: "Stage2 - Test Code"
     jobs:
       - template: templates/test.yml
+        parameters:
+          buildConfiguration: "$(buildConfiguration)"
+          testResultsPath: "$(testResultsPath)"
 
   - stage: DeployInfrastructure
     displayName: "Stage3 - Deploy Azure Infrastructure"
     jobs:
       - template: templates/deploy-infra.yml
+        parameters:
+          azureSubscription: "$(azureSubscription)"
+          resourceGroupName: "$(resourceGroupName)"
+          location: "$(location)"
+          appServicePlanName: "$(appServicePlanName)"
+          webAppName: "$(webAppName)"
 
   - stage: DeployAppStage
     displayName: "Stage4 - Deploy Blazor App on Azure"
     jobs:
       - template: templates/deploy-app.yml
+        parameters:
+          azureSubscription: "$(azureSubscription)"
+          webAppName: "$(webAppName)"
+          artifactName: "$(artifactName)"
 
 
             
