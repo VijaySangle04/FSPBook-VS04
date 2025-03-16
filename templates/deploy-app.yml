@@ -1,7 +1,7 @@
-variables:
-  azureSubscription: 'vjazbasicsubscription(b192d1c3-cd31-4c42-9998-71c20e0900e6)'
-  webAppName: "vjazfspbookblazorapp"
-  artifactName: "drop"
+parameters:
+  azureSubscription: ""
+  webAppName: ""
+  artifactName: ""
 
 jobs:
   - job: DeployAppJob
@@ -11,13 +11,13 @@ jobs:
       - task: DownloadBuildArtifacts@1
         displayName: 'Download Artifact'
         inputs:
-            artifactName: "$(artifactName)"
-            downloadPath: "$(Build.ArtifactStagingDirectory)"
+            artifactName: "${{ parameters.artifactName }}"
+            downloadPath: "${{ Build.ArtifactStagingDirectory }}"
           
       - task: AzureWebApp@1
         displayName: "Deploy Blazor App to Web App"
         inputs:
-            azureSubscription: $(azureSubscription)
-            appName: "$(webAppName)"
-            package: "$(Build.ArtifactStagingDirectory)/$(artifactName)"
+            azureSubscription: ${{ parameters.azureSubscription }}
+            appName: "${{ parameters.webAppName }}"
+            package: "${{ Build.ArtifactStagingDirectory }}/${{ parameters.artifactName }}"
             appType: webApp
